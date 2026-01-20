@@ -153,7 +153,7 @@ func main() {
 	})
 	fmt.Println("server running di localhost:8080")
 
-	err := http.ListenAndServe("localhost:8080", nil)
+	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("gagal running server")
 	}
