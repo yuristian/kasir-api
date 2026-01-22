@@ -6,8 +6,86 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	// Library Swagger
+
+	_ "kasir-api/docs"
+
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
+// @title           CodeWithUmam - Task Session 1
+// @version         1.0
+// @description     Task Untuk Session 1.
+// @host            localhost:8080
+// @BasePath        /
+func main() {
+	// Endpoint Swagger UI
+	http.Handle("/swagger/", httpSwagger.WrapHandler)
+
+	// GET localhost:8080/api/produk/{id}
+	// PUT localhost:8080/api/produk/{id}
+	// DELETE localhost:8080/api/produk/{id}
+	http.HandleFunc("/api/produk/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			getProdukByID(w, r)
+		} else if r.Method == "PUT" {
+			updateProdukByID(w, r)
+		} else if r.Method == "DELETE" {
+			deleteProduk(w, r)
+		}
+	})
+
+	// GET localhost:8080/api/produk
+	// POST localhost:8080/api/produk
+	http.HandleFunc("/api/produk", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			// w.Header().Set("Content-Type", "application/json")
+			// json.NewEncoder(w).Encode(produk)
+			listProduk(w, r)
+		} else if r.Method == "POST" {
+			insertNewProduk(w, r)
+		}
+	})
+
+	//GET /api/categories
+	//POST /api/categories
+	http.HandleFunc("/api/categories", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			listCategories(w, r)
+			// w.Header().Set("Content-Type", "application/json")
+			// json.NewEncoder(w).Encode(category)
+		} else if r.Method == "POST" {
+			insertNewCategory(w, r)
+		}
+	})
+
+	//PUT /api/categories/:id
+	//GET /api/categories/:id
+	//DELETE /api/categories/:id
+	http.HandleFunc("/api/categories/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "PUT" {
+			updateCategoryByID(w, r)
+		} else if r.Method == "GET" {
+			getCategoryByID(w, r)
+		} else if r.Method == "DELETE" {
+			deleteCategory(w, r)
+		}
+	})
+
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		healthCheck(w, r)
+	})
+
+	fmt.Println("server running di localhost:8080")
+
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		fmt.Println("gagal running server")
+	}
+}
+
+// STRUCTURE
 type Produk struct {
 	ID    int    `json:"id"`
 	Nama  string `json:"nama"`
@@ -40,6 +118,7 @@ var category = []Category{
 	{ID: 10, Name: "Makanan & Minuman", Description: "Produk kuliner, camilan, dan bahan pangan segar maupun instan."},
 }
 
+// HELPERS
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
@@ -50,7 +129,22 @@ func respondWithError(w http.ResponseWriter, code int, message string) {
 	respondWithJSON(w, code, map[string]string{"error": message})
 }
 
-// GET localhost:8080/api/produk/{id}
+// listProduk godoc
+// @Summary      Daftar Semua Produk
+// @Tags         produk
+// @Produce      json
+// @Success      200  {array}  Produk
+// @Router       /api/produk [get]
+func listProduk(w http.ResponseWriter, r *http.Request) {
+	respondWithJSON(w, http.StatusOK, produk)
+}
+
+// getProdukByID godoc
+// @Summary      Ambil Produk by ID
+// @Tags         produk
+// @Param        id   path      int  true  "Produk ID"
+// @Success      200  {object}  Produk
+// @Router       /api/produk/{id} [get]
 func getProdukByID(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/produk/")
 	id, err := strconv.Atoi(idStr)
@@ -69,7 +163,12 @@ func getProdukByID(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusNotFound, "Produk Belum Tersedia")
 }
 
-// PUT localhost:8080/api/produk/{id}
+// updateProdukByID godoc
+// @Summary      Update Produk
+// @Tags         produk
+// @Param        id    path      int     true  "Produk ID"
+// @Param        data  body      Produk  true  "Data Update"
+// @Router       /api/produk/{id} [put]
 func updateProdukByID(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/produk/")
 	id, err := strconv.Atoi(idStr)
@@ -98,7 +197,11 @@ func updateProdukByID(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusNotFound, "Produk Belum Tersedia")
 }
 
-// DELETE localhost:8080/api/produk/{id}
+// deleteProduk godoc
+// @Summary      Hapus Produk
+// @Tags         produk
+// @Param        id   path      int  true  "Produk ID"
+// @Router       /api/produk/{id} [delete]
 func deleteProduk(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/produk/")
 	id, err := strconv.Atoi(idStr)
@@ -118,7 +221,14 @@ func deleteProduk(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusNotFound, "Produk Belum Tersedia")
 }
 
-// POST localhost:8080/api/produk
+// insertNewProduk godoc
+// @Summary      Tambah Produk Baru
+// @Tags         produk
+// @Accept       json
+// @Produce      json
+// @Param        produk  body      Produk  true  "Data Produk"
+// @Success      201     {object}  Produk
+// @Router       /api/produk [post]
 func insertNewProduk(w http.ResponseWriter, r *http.Request) {
 	var produkBaru Produk
 	err := json.NewDecoder(r.Body).Decode(&produkBaru)
@@ -137,7 +247,19 @@ func insertNewProduk(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusCreated, produkBaru)
 }
 
-// POST localhost:8080/api/category
+// listCategories godoc
+// @Summary      Daftar Semua Kategori
+// @Tags         kategori
+// @Router       /api/categories [get]
+func listCategories(w http.ResponseWriter, r *http.Request) {
+	respondWithJSON(w, http.StatusOK, category)
+}
+
+// insertNewCategory godoc
+// @Summary      Tambah Kategori
+// @Tags         kategori
+// @Param        data  body  Category  true  "Data Kategori"
+// @Router       /api/categories [post]
 func insertNewCategory(w http.ResponseWriter, r *http.Request) {
 	var newCategory Category
 	err := json.NewDecoder(r.Body).Decode(&newCategory)
@@ -156,7 +278,11 @@ func insertNewCategory(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusCreated, newCategory)
 }
 
-// PUT localhost:8080/api/category/{id}
+// updateCategoryByID godoc
+// @Summary      Update Kategori
+// @Tags         kategori
+// @Param        id  path  int  true  "Kategori ID"
+// @Router       /api/categories/{id} [put]
 func updateCategoryByID(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/categories/")
 	id, err := strconv.Atoi(idStr)
@@ -184,7 +310,11 @@ func updateCategoryByID(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusNotFound, "Invalid Category ID")
 }
 
-// GET localhost:8080/api/category/{id}
+// getCategoryByID godoc
+// @Summary      Ambil Kategori by ID
+// @Tags         kategori
+// @Param        id  path  int  true  "Kategori ID"
+// @Router       /api/categories/{id} [get]
 func getCategoryByID(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/categories/")
 	id, err := strconv.Atoi(idStr)
@@ -204,7 +334,11 @@ func getCategoryByID(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusNotFound, "Invalid Category ID")
 }
 
-// DELETE localhost:8080/api/category/{id}
+// deleteCategory godoc
+// @Summary      Hapus Kategori
+// @Tags         kategori
+// @Param        id  path  int  true  "Kategori ID"
+// @Router       /api/categories/{id} [delete]
 func deleteCategory(w http.ResponseWriter, r *http.Request) {
 	idStr := strings.TrimPrefix(r.URL.Path, "/api/categories/")
 	id, err := strconv.Atoi(idStr)
@@ -225,68 +359,10 @@ func deleteCategory(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusNotFound, "Invalid Category ID")
 }
 
-func main() {
-	// GET localhost:8080/api/produk/{id}
-	// PUT localhost:8080/api/produk/{id}
-	// DELETE localhost:8080/api/produk/{id}
-	http.HandleFunc("/api/produk/", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
-			getProdukByID(w, r)
-		} else if r.Method == "PUT" {
-			updateProdukByID(w, r)
-		} else if r.Method == "DELETE" {
-			deleteProduk(w, r)
-		}
-	})
-
-	// GET localhost:8080/api/produk
-	// POST localhost:8080/api/produk
-	http.HandleFunc("/api/produk", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(produk)
-		} else if r.Method == "POST" {
-			insertNewProduk(w, r)
-		}
-	})
-
-	//GET /api/categories
-	//POST /api/categories
-	http.HandleFunc("/api/categories", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(category)
-		} else if r.Method == "POST" {
-			insertNewCategory(w, r)
-		}
-	})
-
-	//PUT /api/categories/:id
-	//GET /api/categories/:id
-	//DELETE /api/categories/:id
-	http.HandleFunc("/api/categories/", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "PUT" {
-			updateCategoryByID(w, r)
-		} else if r.Method == "GET" {
-			getCategoryByID(w, r)
-		} else if r.Method == "DELETE" {
-			deleteCategory(w, r)
-		}
-	})
-
-	// localhost:8080/health
-	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{
-			"status":  "OK",
-			"message": "API running",
-		})
-	})
-
-	fmt.Println("server running di localhost:8080")
-
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		fmt.Println("gagal running server")
-	}
+// healthCheck godoc
+// @Summary      Health Check
+// @Tags         system
+// @Router       /health [get]
+func healthCheck(w http.ResponseWriter, r *http.Request) {
+	respondWithJSON(w, http.StatusOK, map[string]string{"status": "OK"})
 }

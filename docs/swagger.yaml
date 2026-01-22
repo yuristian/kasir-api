@@ -1,0 +1,166 @@
+basePath: /
+definitions:
+  main.Category:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  main.Produk:
+    properties:
+      harga:
+        type: integer
+      id:
+        type: integer
+      nama:
+        type: string
+      stok:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Task Untuk Session 1.
+  title: CodeWithUmam - Task Session 1
+  version: "1.0"
+paths:
+  /api/categories:
+    get:
+      responses: {}
+      summary: Daftar Semua Kategori
+      tags:
+      - kategori
+    post:
+      parameters:
+      - description: Data Kategori
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/main.Category'
+      responses: {}
+      summary: Tambah Kategori
+      tags:
+      - kategori
+  /api/categories/{id}:
+    delete:
+      parameters:
+      - description: Kategori ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Hapus Kategori
+      tags:
+      - kategori
+    get:
+      parameters:
+      - description: Kategori ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Ambil Kategori by ID
+      tags:
+      - kategori
+    put:
+      parameters:
+      - description: Kategori ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Update Kategori
+      tags:
+      - kategori
+  /api/produk:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.Produk'
+            type: array
+      summary: Daftar Semua Produk
+      tags:
+      - produk
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Data Produk
+        in: body
+        name: produk
+        required: true
+        schema:
+          $ref: '#/definitions/main.Produk'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.Produk'
+      summary: Tambah Produk Baru
+      tags:
+      - produk
+  /api/produk/{id}:
+    delete:
+      parameters:
+      - description: Produk ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses: {}
+      summary: Hapus Produk
+      tags:
+      - produk
+    get:
+      parameters:
+      - description: Produk ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Produk'
+      summary: Ambil Produk by ID
+      tags:
+      - produk
+    put:
+      parameters:
+      - description: Produk ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Data Update
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/main.Produk'
+      responses: {}
+      summary: Update Produk
+      tags:
+      - produk
+  /health:
+    get:
+      responses: {}
+      summary: Health Check
+      tags:
+      - system
+swagger: "2.0"

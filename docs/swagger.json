@@ -1,0 +1,251 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Task Untuk Session 1.",
+        "title": "CodeWithUmam - Task Session 1",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "kategori"
+                ],
+                "summary": "Daftar Semua Kategori",
+                "responses": {}
+            },
+            "post": {
+                "tags": [
+                    "kategori"
+                ],
+                "summary": "Tambah Kategori",
+                "parameters": [
+                    {
+                        "description": "Data Kategori",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Category"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/categories/{id}": {
+            "get": {
+                "tags": [
+                    "kategori"
+                ],
+                "summary": "Ambil Kategori by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Kategori ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "tags": [
+                    "kategori"
+                ],
+                "summary": "Update Kategori",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Kategori ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "tags": [
+                    "kategori"
+                ],
+                "summary": "Hapus Kategori",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Kategori ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/produk": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "produk"
+                ],
+                "summary": "Daftar Semua Produk",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.Produk"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "produk"
+                ],
+                "summary": "Tambah Produk Baru",
+                "parameters": [
+                    {
+                        "description": "Data Produk",
+                        "name": "produk",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Produk"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/main.Produk"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/produk/{id}": {
+            "get": {
+                "tags": [
+                    "produk"
+                ],
+                "summary": "Ambil Produk by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Produk ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Produk"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "produk"
+                ],
+                "summary": "Update Produk",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Produk ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Data Update",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Produk"
+                        }
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "tags": [
+                    "produk"
+                ],
+                "summary": "Hapus Produk",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Produk ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/health": {
+            "get": {
+                "tags": [
+                    "system"
+                ],
+                "summary": "Health Check",
+                "responses": {}
+            }
+        }
+    },
+    "definitions": {
+        "main.Category": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.Produk": {
+            "type": "object",
+            "properties": {
+                "harga": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nama": {
+                    "type": "string"
+                },
+                "stok": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}
