@@ -20,6 +20,7 @@ func RegisterAllRoutes(db *sql.DB) {
 
 	http.HandleFunc("/api/produk", productHandler.HandleProducts)
 	http.HandleFunc("/api/produk/", productHandler.HandleProductByID)
+	http.HandleFunc("/api/categories/{id}/produk", productHandler.GetAllProductsByCategoryID)
 
 	categoryRepo := repositories.NewCategoryRepository(db)
 	categoryService := services.NewCategoryService(categoryRepo)
