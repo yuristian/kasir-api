@@ -18,14 +18,14 @@ const docTemplate = `{
         "/api/categories": {
             "get": {
                 "tags": [
-                    "kategori"
+                    "categories"
                 ],
                 "summary": "Daftar Semua Kategori",
                 "responses": {}
             },
             "post": {
                 "tags": [
-                    "kategori"
+                    "categories"
                 ],
                 "summary": "Tambah Kategori",
                 "parameters": [
@@ -35,7 +35,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.Category"
+                            "$ref": "#/definitions/models.Category"
                         }
                     }
                 ],
@@ -45,7 +45,7 @@ const docTemplate = `{
         "/api/categories/{id}": {
             "get": {
                 "tags": [
-                    "kategori"
+                    "categories"
                 ],
                 "summary": "Ambil Kategori by ID",
                 "parameters": [
@@ -57,11 +57,18 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Category"
+                        }
+                    }
+                }
             },
             "put": {
                 "tags": [
-                    "kategori"
+                    "categories"
                 ],
                 "summary": "Update Kategori",
                 "parameters": [
@@ -77,7 +84,7 @@ const docTemplate = `{
             },
             "delete": {
                 "tags": [
-                    "kategori"
+                    "categories"
                 ],
                 "summary": "Hapus Kategori",
                 "parameters": [
@@ -92,13 +99,13 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/produk": {
+        "/api/product": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "produk"
+                    "product"
                 ],
                 "summary": "Daftar Semua Produk",
                 "responses": {
@@ -107,7 +114,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/main.Produk"
+                                "$ref": "#/definitions/models.Product"
                             }
                         }
                     }
@@ -121,17 +128,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "produk"
+                    "product"
                 ],
                 "summary": "Tambah Produk Baru",
                 "parameters": [
                     {
-                        "description": "Data Produk",
-                        "name": "produk",
+                        "description": "Data Product",
+                        "name": "product",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.Produk"
+                            "$ref": "#/definitions/models.Product"
                         }
                     }
                 ],
@@ -139,22 +146,22 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/main.Produk"
+                            "$ref": "#/definitions/models.Product"
                         }
                     }
                 }
             }
         },
-        "/api/produk/{id}": {
+        "/api/product/{id}": {
             "get": {
                 "tags": [
-                    "produk"
+                    "product"
                 ],
                 "summary": "Ambil Produk by ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Produk ID",
+                        "description": "Product ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -164,20 +171,20 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.Produk"
+                            "$ref": "#/definitions/models.Product"
                         }
                     }
                 }
             },
             "put": {
                 "tags": [
-                    "produk"
+                    "product"
                 ],
                 "summary": "Update Produk",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Produk ID",
+                        "description": "Product ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -188,7 +195,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.Produk"
+                            "$ref": "#/definitions/models.Product"
                         }
                     }
                 ],
@@ -196,13 +203,13 @@ const docTemplate = `{
             },
             "delete": {
                 "tags": [
-                    "produk"
+                    "product"
                 ],
                 "summary": "Hapus Produk",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Produk ID",
+                        "description": "Product ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -222,7 +229,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "main.Category": {
+        "models.Category": {
             "type": "object",
             "properties": {
                 "description": {
@@ -236,19 +243,19 @@ const docTemplate = `{
                 }
             }
         },
-        "main.Produk": {
+        "models.Product": {
             "type": "object",
             "properties": {
-                "harga": {
-                    "type": "integer"
-                },
                 "id": {
                     "type": "integer"
                 },
-                "nama": {
+                "name": {
                     "type": "string"
                 },
-                "stok": {
+                "price": {
+                    "type": "integer"
+                },
+                "stock": {
                     "type": "integer"
                 }
             }

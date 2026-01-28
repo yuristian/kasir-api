@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  main.Category:
+  models.Category:
     properties:
       description:
         type: string
@@ -9,15 +9,15 @@ definitions:
       name:
         type: string
     type: object
-  main.Produk:
+  models.Product:
     properties:
-      harga:
-        type: integer
       id:
         type: integer
-      nama:
+      name:
         type: string
-      stok:
+      price:
+        type: integer
+      stock:
         type: integer
     type: object
 host: localhost:8080
@@ -32,7 +32,7 @@ paths:
       responses: {}
       summary: Daftar Semua Kategori
       tags:
-      - kategori
+      - categories
     post:
       parameters:
       - description: Data Kategori
@@ -40,11 +40,11 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/main.Category'
+          $ref: '#/definitions/models.Category'
       responses: {}
       summary: Tambah Kategori
       tags:
-      - kategori
+      - categories
   /api/categories/{id}:
     delete:
       parameters:
@@ -56,7 +56,7 @@ paths:
       responses: {}
       summary: Hapus Kategori
       tags:
-      - kategori
+      - categories
     get:
       parameters:
       - description: Kategori ID
@@ -64,10 +64,14 @@ paths:
         name: id
         required: true
         type: integer
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
       summary: Ambil Kategori by ID
       tags:
-      - kategori
+      - categories
     put:
       parameters:
       - description: Kategori ID
@@ -78,8 +82,8 @@ paths:
       responses: {}
       summary: Update Kategori
       tags:
-      - kategori
-  /api/produk:
+      - categories
+  /api/product:
     get:
       produces:
       - application/json
@@ -88,35 +92,35 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/main.Produk'
+              $ref: '#/definitions/models.Product'
             type: array
       summary: Daftar Semua Produk
       tags:
-      - produk
+      - product
     post:
       consumes:
       - application/json
       parameters:
-      - description: Data Produk
+      - description: Data Product
         in: body
-        name: produk
+        name: product
         required: true
         schema:
-          $ref: '#/definitions/main.Produk'
+          $ref: '#/definitions/models.Product'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/main.Produk'
+            $ref: '#/definitions/models.Product'
       summary: Tambah Produk Baru
       tags:
-      - produk
-  /api/produk/{id}:
+      - product
+  /api/product/{id}:
     delete:
       parameters:
-      - description: Produk ID
+      - description: Product ID
         in: path
         name: id
         required: true
@@ -124,10 +128,10 @@ paths:
       responses: {}
       summary: Hapus Produk
       tags:
-      - produk
+      - product
     get:
       parameters:
-      - description: Produk ID
+      - description: Product ID
         in: path
         name: id
         required: true
@@ -136,13 +140,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.Produk'
+            $ref: '#/definitions/models.Product'
       summary: Ambil Produk by ID
       tags:
-      - produk
+      - product
     put:
       parameters:
-      - description: Produk ID
+      - description: Product ID
         in: path
         name: id
         required: true
@@ -152,11 +156,11 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/main.Produk'
+          $ref: '#/definitions/models.Product'
       responses: {}
       summary: Update Produk
       tags:
-      - produk
+      - product
   /health:
     get:
       responses: {}
