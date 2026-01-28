@@ -99,6 +99,28 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/categories/{id}/produk": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Daftar Semua Produk berdasarkan kategori ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Product"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/product": {
             "get": {
                 "produces": [
@@ -246,6 +268,9 @@ const docTemplate = `{
         "models.Product": {
             "type": "object",
             "properties": {
+                "category_id": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "integer"
                 },

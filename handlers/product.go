@@ -63,20 +63,12 @@ func (h *ProductHandler) GetAllProducts(w http.ResponseWriter, r *http.Request) 
 // @Tags         product
 // @Produce      json
 // @Success      200  {array}  models.Product
-// @Router       /api/product [get]
+// @Router       /api/categories/{id}/produk [get]
 func (h *ProductHandler) GetAllProductsByCategoryID(w http.ResponseWriter, r *http.Request) {
-	// path := strings.Trim(r.URL.Path, "/")
-	// segments := strings.Split(path, "/")
-	// fmt.Println(segments)
-	// if len(segments) < 4 {
-	// 	utils.RespondWithError(w, http.StatusBadRequest, "URL format harus /api/categories/:id/produk")
-	// 	return
-	// }
-
 	idStr := r.PathValue("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		utils.RespondWithError(w, http.StatusBadRequest, err.Error())
+		utils.RespondWithError(w, http.StatusBadRequest, "Invalid category ID")
 		return
 	}
 
