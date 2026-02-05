@@ -49,7 +49,8 @@ func (h *ProductHandler) HandleProductByID(w http.ResponseWriter, r *http.Reques
 // @Success      200  {array}  models.Product
 // @Router       /api/product [get]
 func (h *ProductHandler) GetAllProducts(w http.ResponseWriter, r *http.Request) {
-	products, err := h.service.GetAllProducts()
+	name := r.URL.Query().Get("name")
+	products, err := h.service.GetAllProducts(name)
 	if err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
